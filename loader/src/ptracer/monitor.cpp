@@ -358,7 +358,7 @@ struct SocketHandler : public EventHandler {
         case SYSTEM_SERVER_STARTED: {
           LOGD("system server started, mounting prop");
 
-          if (mount(prop_path, "/data/adb/modules/zygisksu/module.prop", NULL, MS_BIND, NULL) == -1) {
+          if (mount(prop_path, "/data/adb/modules/rezygisk/module.prop", NULL, MS_BIND, NULL) == -1) {
             PLOGE("failed to mount prop");
           }
 
@@ -405,7 +405,7 @@ static bool ensure_daemon_created(bool is_64bit) {
   if (is_64bit) {
     LOGD("new zygote started.");
 
-    umount2("/data/adb/modules/zygisksu/module.prop", MNT_DETACH);
+    umount2("/data/adb/modules/rezygisk/module.prop", MNT_DETACH);
   }
 
   status->zygote_injected = false;
