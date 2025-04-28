@@ -677,7 +677,7 @@ void ZygiskContext::run_modules_post() {
 void ZygiskContext::app_specialize_pre() {
     flags[APP_SPECIALIZE] = true;
 
-    info_flags = rezygiskd_get_process_flags(g_ctx->args.app->uid);
+    info_flags = rezygiskd_get_process_flags(g_ctx->args.app->uid, (const char *const)process);
      if (info_flags & PROCESS_IS_FIRST_STARTED) {
         /* INFO: To ensure we are really using a clean mount namespace, we use
                    the first process it as reference for clean mount namespace,
@@ -753,10 +753,11 @@ void ZygiskContext::nativeForkSystemServer_pre() {
     flags[SERVER_FORK_AND_SPECIALIZE] = true;
 
     fork_pre();
-    if (is_child()) {
-        run_modules_pre();
-        rezygiskd_system_server_started();
-    }
+    if (!is_child())
+      return;
+
+    run_modules_pre();
+    rezygiskd_system_server_started();
 
     sanitize_fds();
 }
